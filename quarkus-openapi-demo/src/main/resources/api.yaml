@@ -1,0 +1,286 @@
+openapi: 3.0.3
+
+info:
+  title: API de Productos
+  version: 1.0.0
+  description: API REST para gestión de productos
+
+servers:
+  - url: http://localhost:8080
+    description: DEV
+
+  - url: https://qa-api.miempresa.com
+    description: QA
+
+  - url: https://api.miempresa.com
+    description: PROD
+
+tags:
+  - name: Productos
+    description: Operaciones relacionadas a productos
+
+paths:
+
+  /productos:
+
+    get:
+      tags:
+        - Productos
+
+      summary: Obtener todos los productos
+
+      security:
+        - oauth2Auth:
+            - read
+
+      responses:
+        '200':
+          description: Lista de productos
+
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductoResponse'
+
+        '401':
+          description: No autorizado
+
+    post:
+      tags:
+        - Productos
+
+      summary: Crear producto
+
+      security:
+        - oauth2Auth:
+            - write
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoRequest'
+
+      responses:
+        '201':
+          description: Producto creado
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoResponse'
+
+        '400':
+          description: Datos inválidos
+
+  /productos/{id}:
+
+    get:
+      tags:
+        - Productos
+
+      summary: Obtener producto por ID
+
+      security:
+        - oauth2Auth:
+            - read
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: Producto encontrado
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoResponse'
+
+        '404':
+          description: Producto no encontrado
+
+    put:
+      tags:
+        - Productos
+
+      summary: Reemplazar producto completo
+
+      security:
+        - oauth2Auth:
+            - write
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoRequest'
+
+      responses:
+        '200':
+          description: Producto actualizado
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoResponse'
+
+    patch:
+      tags:
+        - Productos
+
+      summary: Actualizar parcialmente producto
+
+      security:
+        - oauth2Auth:
+            - write
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+      requestBody:
+        required: true
+
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoPatchRequest'
+
+      responses:
+        '200':
+          description: Producto parcialmente actualizado
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoResponse'
+
+    delete:
+      tags:
+        - Productos
+
+      summary: Eliminar producto
+
+      security:
+        - oauth2Auth:
+            - admin
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: Producto eliminado
+
+        '404':
+          description: Producto no encontrado
+
+components:
+
+  securitySchemes:
+
+    oauth2Auth:
+      type: oauth2
+
+      flows:
+
+        clientCredentials:
+
+          tokenUrl: https://auth.miempresa.com/oauth/token
+
+          scopes:
+            read: Permite lectura
+            write: Permite escritura
+            admin: Permite eliminar recursos
+
+  schemas:
+
+    ProductoRequest:
+      type: object
+
+      required:
+        - nombre
+        - precio
+
+      properties:
+
+        nombre:
+          type: string
+          example: Laptop Lenovo
+
+        precio:
+          type: number
+          format: double
+          example: 3500.50
+
+        stock:
+          type: integer
+          example: 10
+
+    ProductoPatchRequest:
+      type: object
+
+      properties:
+
+        precio:
+          type: number
+          format: double
+
+        stock:
+          type: integer
+
+    ProductoResponse:
+      type: object
+
+      properties:
+
+        id:
+          type: integer
+          example: 1
+
+        nombre:
+          type: string
+          example: Laptop Lenovo
+
+        precio:
+          type: number
+          format: double
+          example: 3500.50
+
+        stock:
+          type: integer
+          example: 10
+
+        fechaCreacion:
+          type: string
+          format: date-time
+          example: 2026-05-11T20:00:00Z
