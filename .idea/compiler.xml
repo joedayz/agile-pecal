@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="caffeine-template-method" />
+        <module name="orbital-specimen-repository" />
         <module name="coffee-decorator" />
         <module name="pizza-factory-method" />
         <module name="duck-strategy" />
