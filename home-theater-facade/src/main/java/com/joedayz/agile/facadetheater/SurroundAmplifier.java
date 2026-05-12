@@ -11,6 +11,10 @@ public class SurroundAmplifier {
         System.out.println("Amplificador: modo envolvente — " + codec + ".");
     }
 
+    public void setStereoDirect() {
+        System.out.println("Amplificador: Pure Direct — sin DSP, solo el vinilo y tú.");
+    }
+
     public void setVolume(int level) {
         System.out.println("Amplificador: volumen a " + level + "/100 (vecinos en alerta amarilla).");
     }

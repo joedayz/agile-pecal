@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HomeTheaterFacadeTest {
@@ -18,7 +19,8 @@ class HomeTheaterFacadeTest {
                     new SurroundAmplifier(),
                     new StreamingDeck(),
                     new LaserProjector(),
-                    new PopcornMachine());
+                    new PopcornMachine(),
+                    new Turntable());
             facade.playMovie("Test Película");
         });
 
@@ -40,7 +42,8 @@ class HomeTheaterFacadeTest {
                     new SurroundAmplifier(),
                     new StreamingDeck(),
                     new LaserProjector(),
-                    new PopcornMachine());
+                    new PopcornMachine(),
+                    new Turntable());
             facade.endMovie();
         });
 
@@ -49,6 +52,49 @@ class HomeTheaterFacadeTest {
         int offDeck = out.indexOf("Lector: apagado");
         int ampOff = out.indexOf("Amplificador: standby");
         assertTrue(stop < offDeck && offDeck < ampOff);
+    }
+
+    @Test
+    void listenToVinyl_skips_projector_streaming_and_popcorn() {
+        String out = capture(() -> {
+            HomeTheaterFacade facade = new HomeTheaterFacade(
+                    new TheaterLights(),
+                    new SurroundAmplifier(),
+                    new StreamingDeck(),
+                    new LaserProjector(),
+                    new PopcornMachine(),
+                    new Turntable());
+            facade.listenToVinyl("Álbum Demo", "Pista Uno");
+        });
+
+        assertTrue(out.contains("FACHADA: listenToVinyl()"));
+        assertTrue(out.contains("Pure Direct"));
+        assertTrue(out.contains("Tocadiscos:"));
+        assertTrue(out.contains("Pista Uno"));
+        assertTrue(out.contains("Álbum Demo"));
+        assertFalse(out.contains("Palomitas:"));
+        assertFalse(out.contains("Pantalla: bajando"));
+        assertFalse(out.contains("Lector: arranca"));
+    }
+
+    @Test
+    void endVinylSession_order() {
+        String out = capture(() -> {
+            HomeTheaterFacade facade = new HomeTheaterFacade(
+                    new TheaterLights(),
+                    new SurroundAmplifier(),
+                    new StreamingDeck(),
+                    new LaserProjector(),
+                    new PopcornMachine(),
+                    new Turntable());
+            facade.endVinylSession();
+        });
+
+        assertTrue(out.contains("FACHADA: endVinylSession()"));
+        int lift = out.indexOf("Tocadiscos: aguja arriba");
+        int ttOff = out.indexOf("Tocadiscos: tapa abajo");
+        int ampOff = out.indexOf("Amplificador: standby");
+        assertTrue(lift < ttOff && ttOff < ampOff);
     }
 
     private static String capture(Runnable action) {

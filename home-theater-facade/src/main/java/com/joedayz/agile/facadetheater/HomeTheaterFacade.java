@@ -11,18 +11,21 @@ public class HomeTheaterFacade {
     private final StreamingDeck deck;
     private final LaserProjector projector;
     private final PopcornMachine popcorn;
+    private final Turntable turntable;
 
     public HomeTheaterFacade(
             TheaterLights lights,
             SurroundAmplifier amp,
             StreamingDeck deck,
             LaserProjector projector,
-            PopcornMachine popcorn) {
+            PopcornMachine popcorn,
+            Turntable turntable) {
         this.lights = lights;
         this.amp = amp;
         this.deck = deck;
         this.projector = projector;
         this.popcorn = popcorn;
+        this.turntable = turntable;
     }
 
     /** Un solo “Play” para el usuario: detrás, todos los engranajes. */
@@ -62,5 +65,36 @@ public class HomeTheaterFacade {
         popcorn.coolDown();
         System.out.println();
         System.out.println("Fin. El gato vuelve a ser el protagonista de la habitación.");
+    }
+
+    /**
+     * Otro flujo de alto nivel: misma Facade, distinto subsistema activo (sin pantalla ni streaming).
+     */
+    public void listenToVinyl(String album, String track) {
+        System.out.println();
+        System.out.println("═══  FACHADA: listenToVinyl() — sala de escucha  ═══");
+        lights.on();
+        lights.dimTo(28);
+
+        amp.on();
+        amp.setStereoDirect();
+        amp.setVolume(24);
+
+        turntable.on();
+        turntable.cueNeedle();
+        turntable.play(album, track);
+        System.out.println();
+        System.out.println("… sin explosiones en pantalla: solo surcos, polvo estelar y culpa de no limpiar el disco.");
+    }
+
+    public void endVinylSession() {
+        System.out.println();
+        System.out.println("═══  FACHADA: endVinylSession() — cierre minimalista  ═══");
+        turntable.liftAndStop();
+        turntable.off();
+        amp.off();
+        lights.fullBright();
+        System.out.println();
+        System.out.println("Fin del vinilo. El silencio también tiene compresión dinámica.");
     }
 }

@@ -13,12 +13,19 @@ public final class PremiereNight {
                 new SurroundAmplifier(),
                 new StreamingDeck(),
                 new LaserProjector(),
-                new PopcornMachine());
+                new PopcornMachine(),
+                new Turntable());
 
         banner();
 
         theater.playMovie("Patrones de Diseño: La Venganza de los Diagramas UML");
         theater.endMovie();
+
+        System.out.println();
+        System.out.println("    ───  Cambio de formato: misma sala, otra operación (Facade distinta)  ───");
+
+        theater.listenToVinyl("Refactoring Blues", "Extract Method en Fa menor");
+        theater.endVinylSession();
     }
 
     private static void banner() {
