@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="pizza-factory-method" />
         <module name="duck-strategy" />
+        <module name="coffee-decorator" />
       </profile>
     </annotationProcessing>
   </component>

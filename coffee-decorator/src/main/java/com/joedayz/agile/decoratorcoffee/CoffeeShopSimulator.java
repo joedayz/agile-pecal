@@ -24,6 +24,8 @@ public final class CoffeeShopSimulator {
         cup3 = new Mocha(cup3);
         cup3 = new Whip(cup3);
         printOrder(cup3);
+
+
     }
 
     private static void printOrder(Beverage drink) {
