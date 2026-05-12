@@ -6,9 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="caffeine-template-method" />
         <module name="orbital-specimen-repository" />
+        <module name="caffeine-template-method" />
+        <module name="banking-observer" />
         <module name="coffee-decorator" />
+        <module name="payment-command" />
         <module name="pizza-factory-method" />
         <module name="duck-strategy" />
         <module name="home-theater-facade" />

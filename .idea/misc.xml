@@ -11,6 +11,8 @@
         <option value="$PROJECT_DIR$/home-theater-facade/pom.xml" />
         <option value="$PROJECT_DIR$/caffeine-template-method/pom.xml" />
         <option value="$PROJECT_DIR$/orbital-specimen-repository/pom.xml" />
+        <option value="$PROJECT_DIR$/banking-observer/pom.xml" />
+        <option value="$PROJECT_DIR$/payment-command/pom.xml" />
       </list>
     </option>
   </component>
