@@ -6,6 +6,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/duck-strategy/pom.xml" />
+        <option value="$PROJECT_DIR$/pizza-factory-method/pom.xml" />
       </list>
     </option>
   </component>
