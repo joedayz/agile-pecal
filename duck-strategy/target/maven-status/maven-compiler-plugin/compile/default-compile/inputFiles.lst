@@ -1,0 +1,11 @@
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/Duck.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/FlyBehavior.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/FlyNotAllowed.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/FlyWithWings.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/MallardDuck.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/MiniDuckSimulator.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/MuteQuack.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/Quack.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/QuackBehavior.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/RubberDuck.java
+/Users/josediaz/Projects/JoeDayz/agile/duck-strategy/src/main/java/com/joedayz/agile/strategyduck/Squeak.java
