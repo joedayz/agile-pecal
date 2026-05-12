@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="caffeine-template-method" />
         <module name="coffee-decorator" />
         <module name="pizza-factory-method" />
         <module name="duck-strategy" />

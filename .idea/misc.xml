@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/pizza-factory-method/pom.xml" />
         <option value="$PROJECT_DIR$/coffee-decorator/pom.xml" />
         <option value="$PROJECT_DIR$/home-theater-facade/pom.xml" />
+        <option value="$PROJECT_DIR$/caffeine-template-method/pom.xml" />
       </list>
     </option>
   </component>
