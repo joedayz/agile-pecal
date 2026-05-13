@@ -1,0 +1,64 @@
+# ══════════════════════════════════════════════════════════════
+#  Artillery — PRUEBA DE THROUGHPUT
+# ══════════════════════════════════════════════════════════════
+#
+# CONCEPTO:
+#   Throughput = req/s que el sistema puede manejar de forma sostenida.
+#   Artillery reporta "http.request_rate" (peticiones/seg reales).
+#
+# ESTRATEGIA:
+#   Rampa de carga progresiva para encontrar el throughput máximo
+#   sostenible sin degradación de latencia.
+#
+#   Fórmula de Ley de Little aplicada:
+#     Si 50 VUs hacen peticiones a 50ms promedio →
+#     Throughput = 50 / 0.05 = 1000 req/s (teórico)
+#
+# EJECUCIÓN:
+#   artillery run artillery/02-throughput.yml
+#   artillery run artillery/02-throughput.yml --output results/throughput-artillery.json
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    # Fase 1: calentamiento
+    - duration: 10
+      arrivalRate: 5
+      name: "Calentamiento"
+
+    # Fase 2: sube gradualmente
+    - duration: 20
+      arrivalRate: 5
+      rampTo: 30
+      name: "Rampa de subida"
+
+    # Fase 3: carga objetivo sostenida
+    - duration: 30
+      arrivalRate: 30
+      name: "Carga sostenida — midiendo throughput"
+
+    # Fase 4: pico
+    - duration: 10
+      arrivalRate: 30
+      rampTo: 60
+      name: "Rampa al pico"
+
+    # Fase 5: descenso
+    - duration: 10
+      arrivalRate: 60
+      rampTo: 5
+      name: "Descenso"
+
+  ensure:
+    p95: 300          # p95 < 300ms en todo el test
+    maxErrorRate: 1   # < 1% errores
+
+scenarios:
+  - name: "Medición de throughput máximo"
+    weight: 100
+    flow:
+      # Petición sin think-time para maximizar la presión
+      - get:
+          url: "/fast"
+          expect:
+            - statusCode: 200

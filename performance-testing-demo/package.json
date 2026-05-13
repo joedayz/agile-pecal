@@ -1,0 +1,22 @@
+{
+  "name": "performance-testing-demo",
+  "version": "1.0.0",
+  "description": "Demo de pruebas de rendimiento: latencia, throughput y saturación con k6 y Artillery",
+  "private": true,
+  "scripts": {
+    "server": "cd server && npm start",
+    "server:install": "cd server && npm install",
+
+    "k6:latency": "k6 run k6/01-latency.js",
+    "k6:throughput": "k6 run k6/02-throughput.js",
+    "k6:saturation": "k6 run k6/03-saturation.js",
+    "k6:all": "npm run k6:latency && npm run k6:throughput && npm run k6:saturation",
+
+    "artillery:latency": "artillery run artillery/01-latency.yml",
+    "artillery:throughput": "artillery run artillery/02-throughput.yml",
+    "artillery:saturation": "artillery run artillery/03-saturation.yml",
+    "artillery:install": "npm install -g artillery",
+
+    "results:mkdir": "mkdir -p results"
+  }
+}

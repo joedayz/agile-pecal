@@ -1,0 +1,87 @@
+# ══════════════════════════════════════════════════════════════
+#  Artillery — PRUEBA DE SATURACIÓN (Stress + Spike)
+# ══════════════════════════════════════════════════════════════
+#
+# CONCEPTO:
+#   La saturación ocurre cuando un recurso llega al 100% de
+#   su capacidad. Artillery permite observar el colapso del sistema
+#   a través del incremento de errores y la degradación de latencia.
+#
+# INDICADORES de saturación en el reporte de Artillery:
+#   • http.response_time.p99 sube exponencialmente
+#   • http.codes.5xx / errors aumentan
+#   • http.request_rate deja de subir aunque aumenten los VUs
+#   • "pending" requests acumulados
+#
+# ESTRATEGIA:
+#   1. Stress progresivo hasta saturar el endpoint /cpu
+#   2. Spike abrupto al endpoint /unstable para ver el colapso
+#
+# EJECUCIÓN:
+#   artillery run artillery/03-saturation.yml
+#   artillery run artillery/03-saturation.yml --output results/saturation-artillery.json
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    # ── Stress progresivo ────────────────────────────────────────────────────
+    - duration: 15
+      arrivalRate: 5
+      name: "Carga normal"
+
+    - duration: 15
+      arrivalRate: 5
+      rampTo: 30
+      name: "Aumento moderado"
+
+    - duration: 20
+      arrivalRate: 30
+      rampTo: 100
+      name: "Carga alta — buscando saturación"
+
+    - duration: 15
+      arrivalRate: 100
+      name: "Mantiene carga saturada"
+
+    # ── Spike ────────────────────────────────────────────────────────────────
+    - duration: 5
+      arrivalRate: 200
+      name: "SPIKE — pico masivo repentino"
+
+    - duration: 10
+      arrivalRate: 200
+      name: "Mantiene pico"
+
+    # ── Recuperación ─────────────────────────────────────────────────────────
+    - duration: 15
+      arrivalRate: 200
+      rampTo: 10
+      name: "Descenso — ¿se recupera el servidor?"
+
+    - duration: 10
+      arrivalRate: 10
+      name: "Carga residual post-pico"
+
+  # Umbrales más permisivos: en saturación esperamos degradación
+  ensure:
+    p99: 5000         # p99 < 5s (señala colapso si supera)
+    maxErrorRate: 20  # hasta 20% de errores permitido en pico
+
+scenarios:
+  # ── Escenario stress: satura CPU ─────────────────────────────────────────────
+  - name: "Saturación de CPU"
+    weight: 60
+    flow:
+      - get:
+          url: "/cpu"
+          # timeout generoso para que Artillery no descarte la petición
+          # y podamos ver el tiempo real de cola
+          timeout: 15000
+
+  # ── Escenario spike: endpoint inestable ──────────────────────────────────────
+  - name: "Endpoint inestable bajo pico"
+    weight: 40
+    flow:
+      - get:
+          url: "/unstable"
+          # No usamos expect statusCode 200 porque queremos ver los 500 en métricas

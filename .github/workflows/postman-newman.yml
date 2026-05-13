@@ -1,0 +1,29 @@
+name: Postman — Newman (postman-rest-demo)
+
+on:
+  push:
+    paths:
+      - "postman-rest-demo/**"
+      - ".github/workflows/postman-newman.yml"
+  pull_request:
+    paths:
+      - "postman-rest-demo/**"
+      - ".github/workflows/postman-newman.yml"
+
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: postman-rest-demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: postman-rest-demo/package-lock.json
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Contratos con Newman (levanta API y ejecuta colección)
+        run: npm run test:contracts:ci

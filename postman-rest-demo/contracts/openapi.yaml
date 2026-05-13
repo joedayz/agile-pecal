@@ -1,0 +1,132 @@
+openapi: 3.0.3
+info:
+  title: API Libros (demo contratos)
+  version: 1.0.0
+  description: |
+    Contrato REST de referencia. La colección Postman valida respuestas alineadas a este esquema.
+servers:
+  - url: http://localhost:3030
+    description: Local
+paths:
+  /health:
+    get:
+      summary: Estado del servicio
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, version]
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+                  version:
+                    type: string
+  /libros:
+    get:
+      summary: Listar libros
+      responses:
+        "200":
+          description: Lista
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Libro"
+    post:
+      summary: Crear libro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LibroInput"
+      responses:
+        "201":
+          description: Creado
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Libro"
+        "400":
+          description: Validación fallida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /libros/{id}:
+    get:
+      summary: Obtener por id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Libro"
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Libro:
+      type: object
+      required: [id, titulo, autor, anioPublicacion]
+      properties:
+        id:
+          type: string
+        titulo:
+          type: string
+        autor:
+          type: string
+        anioPublicacion:
+          type: integer
+          minimum: 1000
+          maximum: 2100
+    LibroInput:
+      type: object
+      required: [titulo, autor, anioPublicacion]
+      properties:
+        titulo:
+          type: string
+          minLength: 1
+        autor:
+          type: string
+          minLength: 1
+        anioPublicacion:
+          type: integer
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+            message:
+              type: string

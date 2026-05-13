@@ -1,0 +1,68 @@
+# ══════════════════════════════════════════════════════════════
+#  Artillery — PRUEBA DE LATENCIA
+# ══════════════════════════════════════════════════════════════
+#
+# CONCEPTO:
+#   Mide cuánto tiempo tarda el servidor en responder cada solicitud.
+#   Artillery reporta p50, p75, p95, p99 de http.response_time.
+#
+# ESTRATEGIA:
+#   - Pocos usuarios, muchas iteraciones
+#   - Se prueban endpoints con diferentes latencias esperadas
+#   - Los "ensure" actúan como assertions de rendimiento (CI/CD gate)
+#
+# EJECUCIÓN:
+#   artillery run artillery/01-latency.yml
+#   artillery run artillery/01-latency.yml --output results/latency-artillery.json
+#   artillery report results/latency-artillery.json   # genera HTML
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    # Fase única: 5 usuarios durante 30 segundos
+    - duration: 30
+      arrivalRate: 5         # 5 nuevos usuarios por segundo
+      name: "Medición de latencia"
+
+  # Plugins y configuración de métricas
+  ensure:
+    # El p95 de todos los endpoints debe ser < 800ms
+    p95: 800
+    # Menos del 1% de errores
+    maxErrorRate: 1
+
+  # Variables de entorno reutilizables
+  variables:
+    baseUrl: "http://localhost:3000"
+
+scenarios:
+  # ── Escenario 1: Endpoint rápido ─────────────────────────────────────────────
+  - name: "Latencia endpoint /fast"
+    weight: 40              # 40% del tráfico va a este escenario
+    flow:
+      - get:
+          url: "/fast"
+          expect:
+            - statusCode: 200
+            - contentType: json
+          capture:
+            - json: "$.ts"
+              as: "serverTimestamp"
+
+  # ── Escenario 2: Endpoint con latencia moderada ───────────────────────────────
+  - name: "Latencia endpoint /medium"
+    weight: 35
+    flow:
+      - get:
+          url: "/medium"
+          expect:
+            - statusCode: 200
+
+  # ── Escenario 3: Endpoint con latencia alta ───────────────────────────────────
+  - name: "Latencia endpoint /slow"
+    weight: 25
+    flow:
+      - get:
+          url: "/slow"
+          expect:
+            - statusCode: 200

@@ -1,0 +1,206 @@
+{
+  "info": {
+    "name": "Libros API — demo contratos REST",
+    "description": "Colección alineada a `contracts/openapi.yaml`. Variables: `baseUrl` (entorno). Tras crear un libro se guarda `ultimoLibroId` para el siguiente request.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Contrato: status ok y version\", function () {",
+              "  const j = pm.response.json();",
+              "  pm.expect(j).to.have.keys(\"status\", \"version\");",
+              "  pm.expect(j.status).to.eql(\"ok\");",
+              "  pm.expect(j.version).to.eql(\"1.0.0\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "Listar libros",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Envelope { data: Libro[] }\", function () {",
+              "  const j = pm.response.json();",
+              "  pm.expect(j).to.have.key(\"data\");",
+              "  pm.expect(j.data).to.be.an(\"array\");",
+              "  if (j.data.length) {",
+              "    const b = j.data[0];",
+              "    pm.expect(b).to.include.keys(\"id\", \"titulo\", \"autor\", \"anioPublicacion\");",
+              "    pm.expect(b.anioPublicacion).to.be.a(\"number\");",
+              "  }",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/libros"
+      }
+    },
+    {
+      "name": "Obtener libro por id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Contrato Libro\", function () {",
+              "  const { data } = pm.response.json();",
+              "  pm.expect(data.id).to.eql(\"1\");",
+              "  pm.expect(data.titulo).to.be.a(\"string\").and.not.empty;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/libros/1"
+      }
+    },
+    {
+      "name": "Crear libro",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Contrato respuesta creado\", function () {",
+              "  const { data } = pm.response.json();",
+              "  pm.expect(data).to.include.keys(\"id\", \"titulo\", \"autor\", \"anioPublicacion\");",
+              "  pm.expect(data.titulo).to.eql(\"Refactoring\");",
+              "  pm.environment.set(\"ultimoLibroId\", data.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"Refactoring\",\n  \"autor\": \"Martin Fowler\",\n  \"anioPublicacion\": 1999\n}"
+        },
+        "url": "{{baseUrl}}/libros"
+      }
+    },
+    {
+      "name": "Obtener libro recién creado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Id coincide con creación\", function () {",
+              "  const id = pm.environment.get(\"ultimoLibroId\");",
+              "  const { data } = pm.response.json();",
+              "  pm.expect(data.id).to.eql(id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/libros/{{ultimoLibroId}}"
+      }
+    },
+    {
+      "name": "Crear libro — validación 400",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 400\", function () {",
+              "  pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Contrato error\", function () {",
+              "  const j = pm.response.json();",
+              "  pm.expect(j).to.have.key(\"error\");",
+              "  pm.expect(j.error).to.include.keys(\"code\", \"message\");",
+              "  pm.expect(j.error.code).to.eql(\"VALIDATION\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\": \"\",\n  \"autor\": \"Sin título inválido\",\n  \"anioPublicacion\": 1999\n}"
+        },
+        "url": "{{baseUrl}}/libros"
+      }
+    },
+    {
+      "name": "Libro inexistente — 404",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 404\", function () {",
+              "  pm.response.to.have.status(404);",
+              "});",
+              "pm.test(\"Contrato error\", function () {",
+              "  const j = pm.response.json();",
+              "  pm.expect(j.error.code).to.eql(\"NOT_FOUND\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/libros/99999"
+      }
+    }
+  ]
+}

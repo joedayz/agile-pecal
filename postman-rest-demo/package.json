@@ -1,0 +1,19 @@
+{
+  "name": "postman-rest-demo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Demo contratos REST: API local, colección Postman, entorno, Newman",
+  "type": "module",
+  "scripts": {
+    "start": "node api/server.mjs",
+    "test:contracts": "newman run postman/Libros-API.postman_collection.json -e postman/Local.postman_environment.json --reporters cli --color on",
+    "test:contracts:ci": "start-server-and-test start http://localhost:3030/health test:contracts"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "newman": "^6.2.0",
+    "start-server-and-test": "^2.0.10"
+  }
+}
