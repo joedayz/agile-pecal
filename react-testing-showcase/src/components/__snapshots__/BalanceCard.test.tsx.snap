@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BalanceCard > estructura visual estable (snapshot) 1`] = `
+<article
+  class="balance-card balance-card--highlight"
+  data-testid="balance-card"
+>
+  <h2
+    class="balance-card__label"
+  >
+    Saldo a la vista
+  </h2>
+  <p
+    aria-live="polite"
+    class="balance-card__amount"
+  >
+    S/ 250.00
+  </p>
+</article>
+`;
