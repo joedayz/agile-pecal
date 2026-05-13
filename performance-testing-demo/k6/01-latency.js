@@ -42,13 +42,13 @@ export const options = {
 
   thresholds: {
     // El endpoint /fast debe responder en menos de 50ms el 95% del tiempo
-    'fast_latency_ms{p(95)}': ['p(95)<50'],
+    fast_latency_ms: ['p(95)<50'],
 
     // El endpoint /medium debe responder en menos de 200ms el 95% del tiempo
-    'medium_latency_ms{p(95)}': ['p(95)<200'],
+    medium_latency_ms: ['p(95)<200'],
 
     // El endpoint /slow debe responder en menos de 800ms el 95% del tiempo
-    'slow_latency_ms{p(95)}': ['p(95)<800'],
+    slow_latency_ms: ['p(95)<800'],
 
     // Métrica global: p(95) de todas las peticiones bajo 800ms
     http_req_duration: ['p(95)<800'],
