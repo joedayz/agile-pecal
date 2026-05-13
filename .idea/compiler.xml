@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="orbital-specimen-repository" />
         <module name="caffeine-template-method" />
+        <module name="laptop-builder" />
         <module name="banking-observer" />
         <module name="coffee-decorator" />
         <module name="payment-command" />

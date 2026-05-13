@@ -1,0 +1,14 @@
+{
+  "name": "ejemplo-jest-simple",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ejemplo mínimo de Jest para aprender",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:verbose": "jest --verbose"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
