@@ -1,0 +1,20 @@
+{
+  "name": "cypress-alumno-demo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Ejemplo mínimo de Cypress para aula",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "cy:install": "cypress install",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test:e2e": "start-server-and-test dev http://localhost:5173 cy:run"
+  },
+  "devDependencies": {
+    "cypress": "^14.3.0",
+    "start-server-and-test": "^2.0.10",
+    "typescript": "~5.7.3",
+    "vite": "^6.1.0"
+  }
+}

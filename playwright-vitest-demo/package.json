@@ -1,0 +1,23 @@
+{
+  "name": "playwright-vitest-demo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "pw:install": "playwright install chromium",
+    "pw:reinstall": "playwright install chromium --force"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "typescript": "~5.7.3",
+    "vite": "^6.1.0",
+    "vitest": "^3.1.0"
+  }
+}

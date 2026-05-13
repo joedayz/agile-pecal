@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo Playwright + Vitest — formulario</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+      }
+      body {
+        max-width: 26rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      h1 {
+        font-size: 1.35rem;
+        font-weight: 650;
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        margin-top: 1rem;
+      }
+      input[type="text"],
+      input[type="email"],
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 0.25rem;
+        padding: 0.5rem 0.6rem;
+        border-radius: 0.4rem;
+        border: 1px solid color-mix(in srgb, CanvasText 25%, transparent);
+        font: inherit;
+      }
+      textarea {
+        min-height: 6rem;
+        resize: vertical;
+      }
+      .checkbox-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      .checkbox-row input {
+        margin-top: 0.35rem;
+      }
+      .error {
+        color: #b91c1c;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+        min-height: 1.2em;
+      }
+      @media (prefers-color-scheme: dark) {
+        .error {
+          color: #fca5a5;
+        }
+      }
+      button[type="submit"] {
+        margin-top: 1.25rem;
+        padding: 0.55rem 1rem;
+        font: inherit;
+        font-weight: 600;
+        border-radius: 0.45rem;
+        border: none;
+        background: #2563eb;
+        color: #fff;
+        cursor: pointer;
+      }
+      button[type="submit"]:hover {
+        background: #1d4ed8;
+      }
+      #exito {
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        background: color-mix(in srgb, #16a34a 18%, transparent);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Inscripción al taller</h1>
+    <p>Formulario con validaciones: unidades con Vitest, flujo con Playwright.</p>
+
+    <form id="form-inscripcion" novalidate>
+      <label for="nombre">Nombre completo</label>
+      <input id="nombre" name="nombre" type="text" autocomplete="name" />
+      <p class="error" id="error-nombre" role="alert" hidden></p>
+
+      <label for="email">Correo electrónico</label>
+      <input id="email" name="email" type="email" autocomplete="email" />
+      <p class="error" id="error-email" role="alert" hidden></p>
+
+      <label for="telefono">Teléfono (opcional, 9 dígitos)</label>
+      <input id="telefono" name="telefono" type="text" inputmode="numeric" autocomplete="tel" />
+      <p class="error" id="error-telefono" role="alert" hidden></p>
+
+      <label for="mensaje">Mensaje o expectativas</label>
+      <textarea id="mensaje" name="mensaje" maxlength="520"></textarea>
+      <p class="error" id="error-mensaje" role="alert" hidden></p>
+
+      <div class="checkbox-row">
+        <input id="acepto" name="acepto" type="checkbox" />
+        <label for="acepto" style="margin-top: 0; font-weight: 500">
+          Acepto la política de privacidad y el uso de mis datos para gestionar la inscripción.
+        </label>
+      </div>
+      <p class="error" id="error-politica" role="alert" hidden></p>
+
+      <button type="submit">Enviar inscripción</button>
+    </form>
+
+    <p id="exito" hidden data-testid="mensaje-exito">
+      ¡Inscripción recibida! Te contactaremos por correo.
+    </p>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
